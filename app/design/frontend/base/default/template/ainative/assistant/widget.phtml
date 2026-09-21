@@ -1,0 +1,4 @@
+<?php /** @var AiNative_Assistant_Block_Widget $this */ ?>
+<div id="ainative-assistant"></div>
+<script type="application/json" id="ainative-assistant-config"<?php echo $this->getNonceAttr(); ?>><?php echo $this->getConfigJson(); ?></script>
+<script<?php echo $this->getNonceAttr(); ?> src="<?php echo $this->getSkinUrl('ainative/assistant.js'); ?>" defer></script>

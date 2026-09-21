@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss"><stylesheet>ainative/copilot.css</stylesheet></action>
+            <action method="addJs"><script>../skin/adminhtml/default/default/ainative/copilot.js</script></action>
+        </reference>
+    </default>
+    <adminhtml_catalog_product_new>
+        <reference name="before_body_end">
+            <block type="ainative_copilot/adminhtml_catalog_button" name="ainative.copilot.product"><action method="setEntityType"><type>product</type></action></block>
+        </reference>
+    </adminhtml_catalog_product_new>
+    <adminhtml_catalog_product_edit>
+        <reference name="before_body_end">
+            <block type="ainative_copilot/adminhtml_catalog_button" name="ainative.copilot.product"><action method="setEntityType"><type>product</type></action></block>
+        </reference>
+    </adminhtml_catalog_product_edit>
+    <adminhtml_catalog_category_edit>
+        <reference name="before_body_end">
+            <block type="ainative_copilot/adminhtml_catalog_button" name="ainative.copilot.category"><action method="setEntityType"><type>category</type></action></block>
+        </reference>
+    </adminhtml_catalog_category_edit>
+    <adminhtml_sales_order_view>
+        <reference name="sales_order_tabs">
+            <action method="addTab"><name>ainative_reply</name><block>ainative_copilot/adminhtml_sales_order_reply</block></action>
+        </reference>
+    </adminhtml_sales_order_view>
+    <adminhtml_ainative_ask_index/>
+    <adminhtml_ainative_job_index/>
+    <adminhtml_ainative_job_view/>
+</layout>

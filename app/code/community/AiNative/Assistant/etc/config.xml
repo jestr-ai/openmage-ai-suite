@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * OpenMage AI Suite — Storefront Assistant: customer-facing chat over the live catalog.
+ * @license MIT
+ */
+-->
+<config>
+    <modules>
+        <AiNative_Assistant>
+            <version>1.0.0</version>
+        </AiNative_Assistant>
+    </modules>
+
+    <global>
+        <ignoredModules>
+            <entities>
+                <ainative_assistant/>
+            </entities>
+        </ignoredModules>
+        <models>
+            <ainative_assistant><class>AiNative_Assistant_Model</class></ainative_assistant>
+        </models>
+        <helpers>
+            <ainative_assistant><class>AiNative_Assistant_Helper</class></ainative_assistant>
+        </helpers>
+        <blocks>
+            <ainative_assistant><class>AiNative_Assistant_Block</class></ainative_assistant>
+        </blocks>
+
+        <!-- Storefront-scope tools: run as customer or guest, store-scoped, no admin ACL. -->
+        <ainative_tools>
+            <storefront>
+                <search_catalog><class>ainative_assistant/tool_searchCatalog</class></search_catalog>
+                <get_product_details><class>ainative_assistant/tool_getProductDetails</class></get_product_details>
+                <list_categories><class>ainative_assistant/tool_listCategories</class></list_categories>
+                <get_store_info><class>ainative_assistant/tool_getStoreInfo</class></get_store_info>
+                <current_promotions><class>ainative_assistant/tool_currentPromotions</class></current_promotions>
+                <order_status><class>ainative_assistant/tool_orderStatus</class></order_status>
+                <add_to_cart><class>ainative_assistant/tool_addToCart</class></add_to_cart>
+                <handoff><class>ainative_assistant/tool_handoff</class></handoff>
+            </storefront>
+        </ainative_tools>
+    </global>
+
+    <frontend>
+        <routers>
+            <ainative_assistant>
+                <use>standard</use>
+                <args>
+                    <module>AiNative_Assistant</module>
+                    <frontName>ainative-assistant</frontName>
+                </args>
+            </ainative_assistant>
+        </routers>
+        <layout>
+            <updates>
+                <ainative_assistant>
+                    <file>ainative/assistant.xml</file>
+                </ainative_assistant>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <AiNative_Assistant><files><default>AiNative_Core.csv</default></files></AiNative_Assistant>
+            </modules>
+        </translate>
+    </frontend>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <AiNative_Assistant before="Mage_Adminhtml">AiNative_Assistant_Adminhtml</AiNative_Assistant>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <crontab>
+        <jobs>
+            <ainative_assistant_purge>
+                <schedule><cron_expr>15 4 * * *</cron_expr></schedule>
+                <run><model>ainative_assistant/cron::purge</model></run>
+            </ainative_assistant_purge>
+        </jobs>
+    </crontab>
+
+    <default>
+        <ainative_assistant>
+            <general>
+                <enabled>0</enabled>
+                <name>Shop Assistant</name>
+                <greeting>Hi! I can help you find products, check an order, or answer questions about the store. What are you looking for?</greeting>
+                <suggestions>What's on sale right now?|Where is my order?|Help me find a gift</suggestions>
+                <position>right</position>
+                <accent_color>#1f6feb</accent_color>
+                <cms_pages>about-us,customer-service,privacy-policy,enable-cookies</cms_pages>
+                <contact_url>contacts</contact_url>
+                <allow_add_to_cart>1</allow_add_to_cart>
+                <allow_order_lookup>1</allow_order_lookup>
+                <stay_on_topic>1</stay_on_topic>
+                <max_message_length>1000</max_message_length>
+                <history_messages>16</history_messages>
+                <retention_days>90</retention_days>
+                <rate_limit_per_minute>8</rate_limit_per_minute>
+            </general>
+        </ainative_assistant>
+    </default>
+</config>

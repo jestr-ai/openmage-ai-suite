@@ -1,0 +1,52 @@
+/* OpenMage AI Suite — admin copilot */
+.ainative-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;display:flex;align-items:center;justify-content:center}
+.ainative-modal[hidden]{display:none}
+.ainative-modal__box{background:#fff;width:min(920px,94vw);max-height:90vh;display:flex;flex-direction:column;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.35);font-size:12px}
+.ainative-modal__head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #ddd;background:#f5f5f5;border-radius:6px 6px 0 0}
+.ainative-modal__body{padding:12px 14px;overflow:auto}
+.ainative-modal__foot{padding:10px 14px;border-top:1px solid #ddd;display:flex;gap:8px;justify-content:flex-end}
+.ainative-x{border:0;background:none;font-size:20px;cursor:pointer;line-height:1}
+.ainative-row{margin-bottom:10px}
+.ainative-row label{display:block;font-weight:bold;margin-bottom:4px}
+.ainative-checks{display:flex;flex-wrap:wrap;gap:10px}
+.ainative-checks label{font-weight:normal;display:inline-flex;gap:4px;align-items:center}
+.ainative-row textarea,.ainative-row input[type=text],.ainative-row select{width:100%;box-sizing:border-box}
+.ainative-actions{display:flex;align-items:center;gap:10px}
+.ainative-status{color:#666}
+.ainative-status.err{color:#d40707}
+.ainative-preview{margin-top:12px;display:grid;gap:12px}
+.ainative-field{border:1px solid #ddd;border-radius:4px;padding:8px}
+.ainative-field__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ainative-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ainative-compare label{font-weight:bold;display:block;margin-bottom:4px}
+.ainative-current{background:#fafafa;border:1px solid #eee;padding:6px;max-height:280px;overflow:auto;white-space:pre-wrap}
+.ainative-field textarea{width:100%;box-sizing:border-box}
+.ainative-inline-btn{margin-left:6px;vertical-align:middle;cursor:pointer;border:1px solid #c9a300;background:#fff5c2;border-radius:3px;padding:2px 7px;font-size:11px}
+/* the admin skin styles every <button>; keep ours legible */
+.ainative-modal button:not(.scalable),.ainative-ask button:not(.scalable){background-image:none;text-shadow:none;height:auto}
+/* Ask */
+.ainative-ask{display:grid;grid-template-columns:240px 1fr;gap:14px;min-height:60vh}
+.ainative-ask__side{border:1px solid #ddd;border-radius:4px;padding:10px;background:#fafafa;font-size:12px}
+.ainative-ask__meta div{margin-bottom:4px}
+.ainative-ask__history{list-style:none;margin:0;padding:0}
+.ainative-ask__history li{padding:6px;border-bottom:1px solid #eee;cursor:pointer}
+.ainative-ask__history li:hover{background:#eef}
+.ainative-ask__main{display:flex;flex-direction:column;border:1px solid #ddd;border-radius:4px;background:#fff}
+.ainative-ask__thread{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px;max-height:65vh}
+.ainative-ask__form{display:flex;gap:8px;padding:10px;border-top:1px solid #ddd}
+.ainative-ask__form textarea{flex:1;resize:vertical}
+.ainative-msg{display:flex}
+.ainative-msg--user{justify-content:flex-end}
+.ainative-msg__body{max-width:80%;padding:10px 12px;border-radius:10px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.ainative-msg--user .ainative-msg__body{background:#e5eefc}
+.ainative-msg--assistant .ainative-msg__body{background:#f3f3f3}
+.ainative-msg__body table{border-collapse:collapse;margin:6px 0;font-size:11px}
+.ainative-msg__body td,.ainative-msg__body th{border:1px solid #ccc;padding:3px 6px}
+.ainative-tools{margin-top:8px;font-size:11px;color:#555}
+.ainative-tools code{background:#fff;border:1px solid #ddd;padding:1px 4px;border-radius:3px}
+.ainative-pending{margin-top:8px;border:1px dashed #c9a300;background:#fff8dc;padding:8px;border-radius:4px}
+.ainative-pending pre{margin:4px 0;font-size:11px;white-space:pre-wrap}
+.ainative-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ainative-chip{border:1px solid #bbb;background:#fff;color:#2b2b2b;border-radius:14px;padding:4px 10px;cursor:pointer;font-size:11px;font-weight:normal;text-shadow:none;background-image:none;height:auto;line-height:1.4}
+.ainative-chip:hover{background:#eef;color:#1a1a1a}
+.ainative-reply .note{color:#555}

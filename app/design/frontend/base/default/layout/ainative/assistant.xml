@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addItem"><type>skin_css</type><name>ainative/assistant.css</name></action>
+        </reference>
+        <reference name="before_body_end">
+            <block type="ainative_assistant/widget" name="ainative.assistant.widget"/>
+        </reference>
+    </default>
+</layout>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <ainative translate="title" module="ainative_core">
+            <title>AI Suite</title>
+            <sort_order>75</sort_order>
+            <children>
+                <audit translate="title" module="ainative_core">
+                    <title>Audit Log</title>
+                    <sort_order>900</sort_order>
+                    <action>adminhtml/ainative_audit</action>
+                </audit>
+                <config translate="title" module="ainative_core">
+                    <title>Configuration</title>
+                    <sort_order>1000</sort_order>
+                    <action>adminhtml/system_config/edit/section/ainative</action>
+                </config>
+            </children>
+        </ainative>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <ainative translate="title" module="ainative_core">
+                        <title>AI Suite</title>
+                        <sort_order>75</sort_order>
+                        <children>
+                            <audit translate="title"><title>Audit Log</title></audit>
+                            <ask translate="title"><title>Ask Your Store</title></ask>
+                            <tokens translate="title"><title>MCP Access Tokens</title></tokens>
+                            <copilot translate="title"><title>Content Copilot</title></copilot>
+                            <assistant translate="title"><title>Storefront Assistant Transcripts</title></assistant>
+                        </children>
+                    </ainative>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ainative translate="title" module="ainative_core">
+                                        <title>AI Suite</title>
+                                    </ainative>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

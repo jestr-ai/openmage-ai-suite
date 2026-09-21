@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * OpenMage AI Suite — Discovery: make the catalog legible to LLM shopping surfaces and agents.
+ * Product feed (ACP-style JSON + CSV), llms.txt, paginated LLM-friendly catalog JSON.
+ * @license MIT
+ */
+-->
+<config>
+    <modules>
+        <AiNative_Discovery>
+            <version>1.0.0</version>
+        </AiNative_Discovery>
+    </modules>
+
+    <global>
+        <ignoredModules>
+            <entities>
+                <ainative_discovery/>
+            </entities>
+        </ignoredModules>
+        <models>
+            <ainative_discovery><class>AiNative_Discovery_Model</class></ainative_discovery>
+        </models>
+        <helpers>
+            <ainative_discovery><class>AiNative_Discovery_Helper</class></ainative_discovery>
+        </helpers>
+        <events>
+            <controller_front_init_routers>
+                <observers>
+                    <ainative_discovery_llms_router>
+                        <class>AiNative_Discovery_Controller_Router</class>
+                        <method>initControllerRouters</method>
+                    </ainative_discovery_llms_router>
+                </observers>
+            </controller_front_init_routers>
+        </events>
+    </global>
+
+    <frontend>
+        <routers>
+            <ainative_discovery>
+                <use>standard</use>
+                <args>
+                    <module>AiNative_Discovery</module>
+                    <frontName>ainative-discovery</frontName>
+                </args>
+            </ainative_discovery>
+        </routers>
+    </frontend>
+
+    <crontab>
+        <jobs>
+            <ainative_discovery_build_feeds>
+                <schedule><cron_expr>20 */6 * * *</cron_expr></schedule>
+                <run><model>ainative_discovery/feed::buildAll</model></run>
+            </ainative_discovery_build_feeds>
+        </jobs>
+    </crontab>
+
+    <default>
+        <ainative_discovery>
+            <general>
+                <enabled>0</enabled>
+                <feed_token></feed_token>
+                <llms_txt>1</llms_txt>
+                <catalog_api>1</catalog_api>
+                <include_out_of_stock>0</include_out_of_stock>
+                <brand_attribute>manufacturer</brand_attribute>
+                <gtin_attribute></gtin_attribute>
+                <mpn_attribute></mpn_attribute>
+                <condition>new</condition>
+                <seller_name></seller_name>
+                <return_policy_url></return_policy_url>
+                <shipping_note></shipping_note>
+            </general>
+        </ainative_discovery>
+    </default>
+</config>

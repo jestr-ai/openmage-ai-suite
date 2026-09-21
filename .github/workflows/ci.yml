@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.3', extensions: curl, json, mbstring, dom, simplexml, pdo_mysql }
+      - name: PHP syntax
+        run: find app tests -name '*.php' -print0 | xargs -0 -n1 -P4 php -l | grep -v 'No syntax errors' || true
+      - name: JavaScript syntax
+        run: |
+          node -e "new Function(require('fs').readFileSync('skin/adminhtml/default/default/ainative/copilot.js','utf8'))"
+          node -e "new Function(require('fs').readFileSync('skin/frontend/base/default/ainative/assistant.js','utf8'))"
+      - name: XML well-formed
+        run: find app -name '*.xml' -print0 | xargs -0 -n1 xmllint --noout
+
+  unit:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env: { MARIADB_ROOT_PASSWORD: root, MARIADB_DATABASE: openmage }
+        ports: ['3306:3306']
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: suite }
+      - uses: actions/checkout@v4
+        with: { repository: OpenMage/magento-lts, ref: v20.18.0, path: openmage }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.3', extensions: curl, json, mbstring, dom, simplexml, pdo_mysql, gd, intl, bcmath, soap }
+      - name: Install OpenMage
+        working-directory: openmage
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
+          php -f install.php -- --license_agreement_accepted yes --locale en_US --timezone UTC --default_currency USD \
+            --db_host 127.0.0.1 --db_name openmage --db_user root --db_pass root --url http://127.0.0.1/ --skip_url_validation yes \
+            --use_rewrites yes --use_secure no --secure_base_url http://127.0.0.1/ --use_secure_admin no \
+            --admin_lastname Admin --admin_firstname CI --admin_email ci@example.com --admin_username admin --admin_password 'CiPassw0rd!!'
+      - name: Link suite
+        working-directory: openmage
+        run: |
+          curl -sSL https://raw.githubusercontent.com/colinmollenhour/modman/master/modman -o /usr/local/bin/modman && chmod +x /usr/local/bin/modman
+          modman init && modman link ../suite
+      - name: Run tests
+        working-directory: suite
+        run: OPENMAGE_ROOT=../openmage php ../openmage/vendor/bin/phpunit -c .phpunit.dist.xml

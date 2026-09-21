@@ -1,0 +1,14 @@
+<?php /** @var AiNative_Assistant_Block_Adminhtml_Conversation_Stats $this */ $s = $this->getStats(); ?>
+<div class="ainative-kpis" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:0 0 14px">
+  <?php foreach (['conversations' => $this->__('Conversations'), 'messages' => $this->__('Messages'), 'customers' => $this->__('Logged-in'), 'product_cards' => $this->__('Product cards shown'), 'handoffs' => $this->__('Handoffs'), 'tokens' => $this->__('Tokens')] as $k => $label): ?>
+    <div style="border:1px solid #ddd;border-radius:4px;padding:10px;background:#fafafa"><div style="font-size:11px;color:#666"><?php echo $label; ?> · <?php echo $s['days']; ?>d</div><div style="font-size:20px;font-weight:bold"><?php echo number_format($s[$k]); ?></div></div>
+  <?php endforeach; ?>
+</div>
+<?php if ($s['top_questions']): ?>
+<div style="border:1px solid #ddd;border-radius:4px;padding:10px;margin-bottom:14px">
+  <strong><?php echo $this->__('Most asked (last %d days)', $s['days']); ?></strong>
+  <ol style="margin:6px 0 0 18px;columns:2">
+    <?php foreach ($s['top_questions'] as $q): ?><li><?php echo $this->escapeHtml($q['q']); ?> <span style="color:#888">×<?php echo (int) $q['n']; ?></span></li><?php endforeach; ?>
+  </ol>
+</div>
+<?php endif; ?>

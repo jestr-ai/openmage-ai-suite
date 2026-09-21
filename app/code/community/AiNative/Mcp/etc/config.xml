@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * OpenMage AI Suite — MCP server (Model Context Protocol, Streamable HTTP, stateless).
+ * @license MIT
+ */
+-->
+<config>
+    <modules>
+        <AiNative_Mcp>
+            <version>1.0.0</version>
+        </AiNative_Mcp>
+    </modules>
+
+    <global>
+        <!-- Keep Mage_Log's visitor observer (which starts a session) off the API route. -->
+        <ignoredModules>
+            <entities>
+                <ainative_mcp/>
+            </entities>
+        </ignoredModules>
+        <models>
+            <ainative_mcp>
+                <class>AiNative_Mcp_Model</class>
+                <resourceModel>ainative_mcp_resource</resourceModel>
+            </ainative_mcp>
+            <ainative_mcp_resource>
+                <class>AiNative_Mcp_Model_Resource</class>
+                <entities>
+                    <token><table>ainative_mcp_token</table></token>
+                </entities>
+            </ainative_mcp_resource>
+        </models>
+        <helpers>
+            <ainative_mcp><class>AiNative_Mcp_Helper</class></ainative_mcp>
+        </helpers>
+        <blocks>
+            <ainative_mcp><class>AiNative_Mcp_Block</class></ainative_mcp>
+        </blocks>
+        <resources>
+            <ainative_mcp_setup>
+                <setup>
+                    <module>AiNative_Mcp</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </ainative_mcp_setup>
+        </resources>
+
+        <!-- Admin-scope tools. Shared by the MCP server and the Copilot "Ask your store" chat. -->
+        <ainative_tools>
+            <admin>
+                <search_products><class>ainative_mcp/tool_catalog_searchProducts</class></search_products>
+                <get_product><class>ainative_mcp/tool_catalog_getProduct</class></get_product>
+                <update_product><class>ainative_mcp/tool_catalog_updateProduct</class></update_product>
+                <list_categories><class>ainative_mcp/tool_catalog_listCategories</class></list_categories>
+                <list_attributes><class>ainative_mcp/tool_catalog_listAttributes</class></list_attributes>
+                <get_stock><class>ainative_mcp/tool_catalog_getStock</class></get_stock>
+                <update_stock><class>ainative_mcp/tool_catalog_updateStock</class></update_stock>
+                <list_orders><class>ainative_mcp/tool_sales_listOrders</class></list_orders>
+                <get_order><class>ainative_mcp/tool_sales_getOrder</class></get_order>
+                <add_order_comment><class>ainative_mcp/tool_sales_addOrderComment</class></add_order_comment>
+                <search_customers><class>ainative_mcp/tool_customer_searchCustomers</class></search_customers>
+                <get_customer><class>ainative_mcp/tool_customer_getCustomer</class></get_customer>
+                <sales_summary><class>ainative_mcp/tool_report_salesSummary</class></sales_summary>
+                <bestsellers><class>ainative_mcp/tool_report_bestsellers</class></bestsellers>
+                <low_stock><class>ainative_mcp/tool_report_lowStock</class></low_stock>
+                <abandoned_carts><class>ainative_mcp/tool_report_abandonedCarts</class></abandoned_carts>
+                <get_cms_page><class>ainative_mcp/tool_content_getCmsPage</class></get_cms_page>
+                <update_cms_page><class>ainative_mcp/tool_content_updateCmsPage</class></update_cms_page>
+                <list_cart_price_rules><class>ainative_mcp/tool_content_listCartPriceRules</class></list_cart_price_rules>
+                <describe_store><class>ainative_mcp/tool_store_describeStore</class></describe_store>
+                <get_config><class>ainative_mcp/tool_store_getConfig</class></get_config>
+                <sql_readonly><class>ainative_mcp/tool_store_sqlReadonly</class></sql_readonly>
+            </admin>
+        </ainative_tools>
+    </global>
+
+    <frontend>
+        <routers>
+            <ainative_mcp>
+                <use>standard</use>
+                <args>
+                    <module>AiNative_Mcp</module>
+                    <frontName>ainative-mcp</frontName>
+                </args>
+            </ainative_mcp>
+        </routers>
+    </frontend>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <AiNative_Mcp before="Mage_Adminhtml">AiNative_Mcp_Adminhtml</AiNative_Mcp>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <translate>
+            <modules>
+                <AiNative_Mcp><files><default>AiNative_Core.csv</default></files></AiNative_Mcp>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <default>
+        <ainative_mcp>
+            <general>
+                <enabled>0</enabled>
+                <allowed_origins></allowed_origins>
+                <allow_url_token>1</allow_url_token>
+                <server_name>OpenMage Store</server_name>
+            </general>
+            <sql>
+                <enabled>0</enabled>
+                <max_rows>200</max_rows>
+                <denied_tables>admin_,oauth_,api_,api2_,core_config_data,core_session,customer_entity,customer_address_entity,ainative_mcp_token,sales_flat_order_payment,sales_flat_quote_payment,sales_payment_transaction,paypal_,authorizenet_,persistent_session,newsletter_subscriber,log_visitor,log_customer</denied_tables>
+            </sql>
+        </ainative_mcp>
+    </default>
+</config>

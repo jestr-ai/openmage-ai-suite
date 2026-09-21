@@ -1,0 +1,26 @@
+<?php /** @var AiNative_Copilot_Block_Adminhtml_Sales_Order_Reply $this */ ?>
+<div class="entry-edit ainative-reply">
+  <div class="entry-edit-head"><h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Draft a customer e-mail with AI'); ?></h4></div>
+  <fieldset>
+    <p class="note"><?php echo $this->__('Describe what the message should say. The draft is written from the order data; review and edit before sending it via the order comment form or your mail client.'); ?></p>
+    <textarea id="ainative-reply-intent" rows="3" style="width:100%" placeholder="<?php echo $this->__('e.g. apologise for the shipping delay, new ETA Friday, offer 10% off next order'); ?>"></textarea>
+    <p style="margin:8px 0">
+      <button type="button" class="scalable" id="ainative-reply-generate"><span><span><?php echo $this->__('Draft reply'); ?></span></span></button>
+      <span class="ainative-status" id="ainative-reply-status"></span>
+    </p>
+    <textarea id="ainative-reply-text" rows="14" style="width:100%" hidden></textarea>
+    <p id="ainative-reply-actions" hidden>
+      <button type="button" class="scalable" id="ainative-reply-copy"><span><span><?php echo $this->__('Copy'); ?></span></span></button>
+      <button type="button" class="scalable" id="ainative-reply-to-comment"><span><span><?php echo $this->__('Insert into order comment'); ?></span></span></button>
+    </p>
+  </fieldset>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  AiNativeCopilot.orderReply({
+    orderId: <?php echo (int) $this->getOrder()->getId(); ?>,
+    url: <?php echo json_encode($this->getGenerateUrl()); ?>,
+    formKey: <?php echo json_encode($this->getFormKey()); ?>
+  });
+});
+</script>

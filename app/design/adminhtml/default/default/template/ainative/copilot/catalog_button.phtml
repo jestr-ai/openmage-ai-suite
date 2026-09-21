@@ -1,0 +1,61 @@
+<?php /** @var AiNative_Copilot_Block_Adminhtml_Catalog_Button $this */ ?>
+<div id="ainative-copilot-modal" class="ainative-modal" hidden>
+  <div class="ainative-modal__box">
+    <div class="ainative-modal__head">
+      <strong><?php echo $this->__('Generate with AI'); ?></strong>
+      <button type="button" class="ainative-x" data-ainative-close aria-label="Close">×</button>
+    </div>
+    <div class="ainative-modal__body">
+      <div class="ainative-row">
+        <label><?php echo $this->__('Fields'); ?></label>
+        <div class="ainative-checks">
+          <?php foreach ($this->getFields() as $f): ?>
+            <label><input type="checkbox" name="ainative_fields" value="<?php echo $f; ?>" <?php echo in_array($f, ['description', 'short_description', 'meta_title', 'meta_description'], true) ? 'checked' : ''; ?>> <?php echo $f; ?></label>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <div class="ainative-row">
+        <label for="ainative_tone"><?php echo $this->__('Tone'); ?></label>
+        <select id="ainative_tone">
+          <?php foreach ($this->getTones() as $k => $label): ?>
+            <option value="<?php echo $k; ?>" <?php echo $k === $this->getDefaultTone() ? 'selected' : ''; ?>><?php echo $this->escapeHtml($label); ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div class="ainative-row">
+        <label for="ainative_hints"><?php echo $this->__('Notes for the writer (optional)'); ?></label>
+        <textarea id="ainative_hints" rows="2" placeholder="<?php echo $this->__('e.g. emphasise sustainability; target runners; mention 2-year warranty'); ?>"></textarea>
+      </div>
+      <?php if ($this->getEntityType() === 'product'): ?>
+      <div class="ainative-row">
+        <label for="ainative_ref"><?php echo $this->__('Reference product to mimic (optional)'); ?></label>
+        <input type="text" id="ainative_ref" list="ainative_ref_list" placeholder="<?php echo $this->__('type SKU or name…'); ?>" autocomplete="off">
+        <datalist id="ainative_ref_list"></datalist>
+        <input type="hidden" id="ainative_ref_id" value="">
+      </div>
+      <?php endif; ?>
+      <div class="ainative-actions">
+        <button type="button" class="scalable" data-ainative-generate><span><span><?php echo $this->__('Generate'); ?></span></span></button>
+        <span class="ainative-status" id="ainative-status"></span>
+      </div>
+      <div id="ainative-preview" class="ainative-preview" hidden></div>
+    </div>
+    <div class="ainative-modal__foot">
+      <button type="button" class="scalable" data-ainative-close><span><span><?php echo $this->__('Close'); ?></span></span></button>
+      <button type="button" class="scalable save" data-ainative-apply hidden><span><span><?php echo $this->__('Apply selected to form'); ?></span></span></button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  AiNativeCopilot.catalog({
+    entityType: <?php echo json_encode($this->getEntityType()); ?>,
+    entityId: <?php echo (int) $this->getEntityId(); ?>,
+    storeId: <?php echo (int) $this->getStoreId(); ?>,
+    generateUrl: <?php echo json_encode($this->getGenerateUrl()); ?>,
+    searchUrl: <?php echo json_encode($this->getSearchUrl()); ?>,
+    formKey: <?php echo json_encode($this->getFormKey()); ?>,
+    labels: { button: <?php echo json_encode($this->__('Generate with AI')); ?>, working: <?php echo json_encode($this->__('Generating…')); ?>, current: <?php echo json_encode($this->__('Current')); ?>, proposed: <?php echo json_encode($this->__('Proposed')); ?>, use: <?php echo json_encode($this->__('Use this')); ?> }
+  });
+});
+</script>

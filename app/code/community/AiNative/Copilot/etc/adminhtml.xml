@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <ainative>
+            <children>
+                <ask translate="title" module="ainative_core">
+                    <title>Ask Your Store</title>
+                    <sort_order>10</sort_order>
+                    <action>adminhtml/ainative_ask</action>
+                </ask>
+                <copilot translate="title" module="ainative_core">
+                    <title>Content Drafts</title>
+                    <sort_order>20</sort_order>
+                    <action>adminhtml/ainative_job</action>
+                </copilot>
+            </children>
+        </ainative>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ainative_copilot translate="title" module="ainative_core">
+                                        <title>AI Suite — Admin Copilot</title>
+                                    </ainative_copilot>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

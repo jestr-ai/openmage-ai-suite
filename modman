@@ -1,0 +1,14 @@
+# modman mapping for OpenMage AI Suite — https://github.com/colinmollenhour/modman
+app/code/community/AiNative                                   app/code/community/AiNative
+app/etc/modules/AiNative_Core.xml                             app/etc/modules/AiNative_Core.xml
+app/etc/modules/AiNative_Mcp.xml                              app/etc/modules/AiNative_Mcp.xml
+app/etc/modules/AiNative_Copilot.xml                          app/etc/modules/AiNative_Copilot.xml
+app/etc/modules/AiNative_Assistant.xml                        app/etc/modules/AiNative_Assistant.xml
+app/etc/modules/AiNative_Discovery.xml                        app/etc/modules/AiNative_Discovery.xml
+app/design/adminhtml/default/default/layout/ainative          app/design/adminhtml/default/default/layout/ainative
+app/design/adminhtml/default/default/template/ainative        app/design/adminhtml/default/default/template/ainative
+app/design/frontend/base/default/layout/ainative              app/design/frontend/base/default/layout/ainative
+app/design/frontend/base/default/template/ainative            app/design/frontend/base/default/template/ainative
+skin/adminhtml/default/default/ainative                       skin/adminhtml/default/default/ainative
+skin/frontend/base/default/ainative                           skin/frontend/base/default/ainative
+app/locale/en_US/AiNative_Core.csv                            app/locale/en_US/AiNative_Core.csv

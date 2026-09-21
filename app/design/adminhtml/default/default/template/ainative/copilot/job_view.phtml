@@ -1,0 +1,25 @@
+<?php /** @var AiNative_Copilot_Block_Adminhtml_Job_View $this */ $job = $this->getJob(); $draft = $job->getDraft(); ?>
+<div class="content-header">
+  <h3 class="icon-head head-products"><?php echo $this->__('Review Draft #%d — %s', $job->getId(), $this->escapeHtml($job->getEntityLabel())); ?></h3>
+  <p class="content-buttons form-buttons">
+    <button type="button" class="scalable back" onclick="setLocation('<?php echo $this->getBackUrl(); ?>')"><span><span><?php echo $this->__('Back'); ?></span></span></button>
+    <?php if ($job->getStatus() === 'draft'): ?>
+    <button type="button" class="scalable delete" onclick="setLocation('<?php echo $this->getRejectUrl(); ?>')"><span><span><?php echo $this->__('Reject'); ?></span></span></button>
+    <button type="button" class="scalable save" onclick="document.getElementById('ainative-draft-form').submit()"><span><span><?php echo $this->__('Apply to %s', $job->getType() === 'category_content' ? 'category' : 'product'); ?></span></span></button>
+    <?php endif; ?>
+  </p>
+</div>
+<p class="note"><?php echo $this->__('Status: <b>%s</b> · Store: %d · Tokens: %d in / %d out', $this->escapeHtml($job->getStatus()), (int) $job->getStoreId(), (int) $job->getData('tokens_in'), (int) $job->getData('tokens_out')); ?>
+<?php if ($job->getData('error')): ?><br><span style="color:#d40707"><?php echo $this->escapeHtml($job->getData('error')); ?></span><?php endif; ?></p>
+<form id="ainative-draft-form" method="post" action="<?php echo $this->getApplyUrl(); ?>">
+  <input type="hidden" name="form_key" value="<?php echo $this->getFormKey(); ?>">
+  <?php foreach ($draft as $field => $value): ?>
+  <div class="entry-edit">
+    <div class="entry-edit-head"><h4 class="fieldset-legend"><?php echo $this->escapeHtml($field); ?></h4></div>
+    <fieldset class="ainative-compare">
+      <div><label><?php echo $this->__('Current'); ?></label><div class="ainative-current"><?php echo nl2br($this->escapeHtml($this->getCurrentValue($field))) ?: '<i>' . $this->__('empty') . '</i>'; ?></div></div>
+      <div><label><?php echo $this->__('Proposed (editable)'); ?></label><textarea name="draft[<?php echo $this->escapeHtml($field); ?>]" rows="<?php echo $field === 'description' ? 14 : 3; ?>" style="width:100%"><?php echo $this->escapeHtml($value); ?></textarea></div>
+    </fieldset>
+  </div>
+  <?php endforeach; ?>
+</form>

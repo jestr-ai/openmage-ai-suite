@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * OpenMage AI Suite — Copilot (admin): content generation, bulk drafts, order reply drafts, "Ask your store".
+ * @license MIT
+ */
+-->
+<config>
+    <modules>
+        <AiNative_Copilot>
+            <version>1.0.0</version>
+        </AiNative_Copilot>
+    </modules>
+
+    <global>
+        <models>
+            <ainative_copilot>
+                <class>AiNative_Copilot_Model</class>
+                <resourceModel>ainative_copilot_resource</resourceModel>
+            </ainative_copilot>
+            <ainative_copilot_resource>
+                <class>AiNative_Copilot_Model_Resource</class>
+                <entities>
+                    <job><table>ainative_job</table></job>
+                    <conversation><table>ainative_conversation</table></conversation>
+                    <message><table>ainative_message</table></message>
+                </entities>
+            </ainative_copilot_resource>
+        </models>
+        <helpers>
+            <ainative_copilot><class>AiNative_Copilot_Helper</class></ainative_copilot>
+        </helpers>
+        <blocks>
+            <ainative_copilot><class>AiNative_Copilot_Block</class></ainative_copilot>
+        </blocks>
+        <resources>
+            <ainative_copilot_setup>
+                <setup>
+                    <module>AiNative_Copilot</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </ainative_copilot_setup>
+        </resources>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <AiNative_Copilot before="Mage_Adminhtml">AiNative_Copilot_Adminhtml</AiNative_Copilot>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <ainative_copilot>
+                    <file>ainative/copilot.xml</file>
+                </ainative_copilot>
+            </updates>
+        </layout>
+        <events>
+            <adminhtml_block_html_before>
+                <observers>
+                    <ainative_copilot_massaction>
+                        <class>ainative_copilot/observer</class>
+                        <method>addProductGridMassaction</method>
+                    </ainative_copilot_massaction>
+                </observers>
+            </adminhtml_block_html_before>
+            <adminhtml_catalog_product_edit_prepare_form>
+                <observers>
+                    <ainative_copilot_product_form>
+                        <class>ainative_copilot/observer</class>
+                        <method>markProductForm</method>
+                    </ainative_copilot_product_form>
+                </observers>
+            </adminhtml_catalog_product_edit_prepare_form>
+        </events>
+        <translate>
+            <modules>
+                <AiNative_Copilot><files><default>AiNative_Core.csv</default></files></AiNative_Copilot>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <crontab>
+        <jobs>
+            <ainative_copilot_process_jobs>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
+                <run><model>ainative_copilot/cron::processJobs</model></run>
+            </ainative_copilot_process_jobs>
+        </jobs>
+    </crontab>
+
+    <default>
+        <ainative_copilot>
+            <general>
+                <enabled>1</enabled>
+                <tone>professional</tone>
+                <language></language>
+                <brand_guidelines></brand_guidelines>
+                <jobs_per_run>10</jobs_per_run>
+                <ask_history>20</ask_history>
+            </general>
+        </ainative_copilot>
+    </default>
+</config>

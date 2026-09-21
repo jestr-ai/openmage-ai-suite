@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <ainative translate="label" module="ainative_core">
+            <label>AI Suite</label>
+            <sort_order>250</sort_order>
+        </ainative>
+    </tabs>
+    <sections>
+        <ainative translate="label" module="ainative_core">
+            <label>Core &amp; Providers</label>
+            <tab>ainative</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label" module="ainative_core">
+                    <label>General</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Enable AI Suite</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Master switch for all AI Suite modules.</comment>
+                        </enabled>
+                        <provider translate="label comment">
+                            <label>Default Provider</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ainative_core/config_source_provider</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Which LLM provider handles requests. Keys are configured per provider below. Nothing is sent anywhere until you enable a feature.</comment>
+                        </provider>
+                        <max_tokens translate="label">
+                            <label>Max Output Tokens</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </max_tokens>
+                        <temperature translate="label comment">
+                            <label>Temperature</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-number</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Used by OpenAI and Gemini. Anthropic models use the Effort setting instead.</comment>
+                        </temperature>
+                        <timeout translate="label">
+                            <label>HTTP Timeout (seconds)</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </timeout>
+                        <max_iterations translate="label comment">
+                            <label>Max Tool Iterations per Request</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Upper bound on model → tool → model round-trips for one answer.</comment>
+                        </max_iterations>
+                        <store_context translate="label comment">
+                            <label>Store Context</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Describe what the store sells, its tone and policies. Prepended to every system prompt.</comment>
+                        </store_context>
+                    </fields>
+                </general>
+
+                <anthropic translate="label" module="ainative_core">
+                    <label>Anthropic (Claude)</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <api_key translate="label">
+                            <label>API Key</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </api_key>
+                        <model translate="label comment">
+                            <label>Model</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>e.g. claude-opus-5, claude-sonnet-5, claude-haiku-4-5</comment>
+                        </model>
+                        <effort translate="label comment">
+                            <label>Effort</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>ainative_core/config_source_effort</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Controls thinking depth and token spend on Claude 4.6+ models. "low" is right for chat and classification.</comment>
+                        </effort>
+                        <base_url translate="label">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </base_url>
+                    </fields>
+                </anthropic>
+
+                <openai translate="label" module="ainative_core">
+                    <label>OpenAI (and OpenAI-compatible)</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <api_key translate="label">
+                            <label>API Key</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </api_key>
+                        <model translate="label">
+                            <label>Model</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </model>
+                        <base_url translate="label comment">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Point this at Ollama, vLLM, LM Studio or any OpenAI-compatible endpoint to run local models.</comment>
+                        </base_url>
+                    </fields>
+                </openai>
+
+                <gemini translate="label" module="ainative_core">
+                    <label>Google Gemini</label>
+                    <sort_order>40</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <api_key translate="label">
+                            <label>API Key</label>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </api_key>
+                        <model translate="label">
+                            <label>Model</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </model>
+                        <base_url translate="label">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </base_url>
+                    </fields>
+                </gemini>
+
+                <security translate="label" module="ainative_core">
+                    <label>Security &amp; Limits</label>
+                    <sort_order>50</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <allow_write_tools translate="label comment">
+                            <label>Allow Write Tools</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>When No, AI tools can only read. Write tools (update stock, edit product, add order comment…) are refused for every actor, even with a write-scoped MCP token.</comment>
+                        </allow_write_tools>
+                        <redact_pii translate="label comment">
+                            <label>Redact PII Before Sending to Provider</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Masks e-mail addresses and phone numbers in tool results before they reach the LLM. Does not affect the MCP server (the connected client already runs as the admin).</comment>
+                        </redact_pii>
+                        <monthly_token_budget translate="label comment">
+                            <label>Monthly Token Budget</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Total input+output tokens per calendar month across all features. 0 = unlimited. Requests are refused once exceeded.</comment>
+                        </monthly_token_budget>
+                        <rate_limit_per_minute translate="label comment">
+                            <label>Requests per Minute per Actor</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Applies per admin token / customer session / IP.</comment>
+                        </rate_limit_per_minute>
+                        <audit_retention_days translate="label">
+                            <label>Audit Log Retention (days)</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </audit_retention_days>
+                        <debug_log translate="label comment">
+                            <label>Debug Log</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Writes full provider requests/responses to var/log/ainative.log. Contains prompts — disable in production.</comment>
+                        </debug_log>
+                    </fields>
+                </security>
+            </groups>
+        </ainative>
+    </sections>
+</config>

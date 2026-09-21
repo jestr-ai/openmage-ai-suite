@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <ainative>
+            <children>
+                <tokens translate="title" module="ainative_core">
+                    <title>MCP Access Tokens</title>
+                    <sort_order>100</sort_order>
+                    <action>adminhtml/ainative_token</action>
+                </tokens>
+            </children>
+        </ainative>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ainative_mcp translate="title" module="ainative_core">
+                                        <title>AI Suite — MCP Server</title>
+                                    </ainative_mcp>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

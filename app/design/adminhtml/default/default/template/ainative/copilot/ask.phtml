@@ -1,0 +1,41 @@
+<?php /** @var AiNative_Copilot_Block_Adminhtml_Ask $this */ ?>
+<div class="content-header">
+  <h3 class="icon-head head-report"><?php echo $this->__('Ask Your Store'); ?></h3>
+  <p class="content-buttons form-buttons"><button type="button" class="scalable" id="ainative-ask-new"><span><span><?php echo $this->__('New conversation'); ?></span></span></button></p>
+</div>
+<div class="ainative-ask">
+  <aside class="ainative-ask__side">
+    <div class="ainative-ask__meta">
+      <div><?php echo $this->__('Provider'); ?>: <code><?php echo $this->escapeHtml($this->getProviderLabel()); ?></code></div>
+      <div><?php echo $this->__('Write tools'); ?>: <b><?php echo $this->isWriteAllowed() ? $this->__('enabled (with confirmation)') : $this->__('disabled'); ?></b></div>
+    </div>
+    <h4><?php echo $this->__('Recent'); ?></h4>
+    <ul id="ainative-ask-history" class="ainative-ask__history"></ul>
+  </aside>
+  <section class="ainative-ask__main">
+    <div id="ainative-ask-thread" class="ainative-ask__thread">
+      <div class="ainative-msg ainative-msg--assistant">
+        <div class="ainative-msg__body"><?php echo $this->__('Ask anything about your catalog, inventory, orders, customers or sales. I look the answers up in the store, and show which tools I used.'); ?>
+          <div class="ainative-suggestions">
+            <?php foreach ($this->getSuggestions() as $s): ?><button type="button" class="ainative-chip" data-ainative-suggest><?php echo $this->escapeHtml($s); ?></button><?php endforeach; ?>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form id="ainative-ask-form" class="ainative-ask__form" onsubmit="return false;">
+      <textarea id="ainative-ask-input" rows="2" placeholder="<?php echo $this->__('Ask a question… (Enter to send, Shift+Enter for newline)'); ?>"></textarea>
+      <button type="submit" class="scalable save" id="ainative-ask-send"><span><span><?php echo $this->__('Send'); ?></span></span></button>
+    </form>
+  </section>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  AiNativeCopilot.ask({
+    sendUrl: <?php echo json_encode($this->getSendUrl()); ?>,
+    historyUrl: <?php echo json_encode($this->getHistoryUrl()); ?>,
+    loadUrl: <?php echo json_encode($this->getLoadUrl()); ?>,
+    formKey: <?php echo json_encode($this->getFormKey()); ?>,
+    labels: { thinking: <?php echo json_encode($this->__('Looking that up…')); ?>, confirm: <?php echo json_encode($this->__('Confirm and execute')); ?>, dismiss: <?php echo json_encode($this->__('Dismiss')); ?>, proposed: <?php echo json_encode($this->__('Proposed change (not executed yet)')); ?>, used: <?php echo json_encode($this->__('Tools used')); ?> }
+  });
+});
+</script>

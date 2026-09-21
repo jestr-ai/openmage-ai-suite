@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <ainative_mcp translate="label" module="ainative_core">
+            <label>MCP Server</label>
+            <tab>ainative</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>20</sort_order>
+            <show_in_default>1</show_in_default>
+            <groups>
+                <general translate="label" module="ainative_core">
+                    <label>MCP Server (Claude, ChatGPT, Claude Code, Cursor…)</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <comment><![CDATA[Endpoint: <code>{base_url}ainative-mcp</code> — Streamable HTTP transport. Create access tokens under <b>AI Suite &gt; MCP Access Tokens</b>. Each token runs with the permissions of the admin user it belongs to.]]></comment>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enable MCP Endpoint</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </enabled>
+                        <server_name translate="label">
+                            <label>Server Name (shown to AI clients)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </server_name>
+                        <allowed_origins translate="label comment">
+                            <label>Allowed Origins</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>One origin per line (e.g. https://claude.ai). Requests carrying an Origin header not listed here are rejected (DNS-rebinding protection). Requests without an Origin header (CLI clients) are allowed.</comment>
+                        </allowed_origins>
+                        <allow_url_token translate="label comment">
+                            <label>Allow Token in URL Path</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Lets clients that cannot set headers connect via /ainative-mcp/index/index/t/&lt;token&gt;. Prefer the Authorization: Bearer header when possible.</comment>
+                        </allow_url_token>
+                    </fields>
+                </general>
+                <sql translate="label" module="ainative_core">
+                    <label>Read-only SQL Tool</label>
+                    <sort_order>20</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <fields>
+                        <enabled translate="label comment">
+                            <label>Enable sql_readonly Tool</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Lets the AI run single SELECT statements. Denied tables below are never queryable, a LIMIT is always enforced, and the query runs on the read connection.</comment>
+                        </enabled>
+                        <max_rows translate="label">
+                            <label>Max Rows</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                        </max_rows>
+                        <denied_tables translate="label comment">
+                            <label>Denied Table Prefixes</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <comment>Comma-separated. A table is denied if its name starts with any entry.</comment>
+                        </denied_tables>
+                    </fields>
+                </sql>
+            </groups>
+        </ainative_mcp>
+    </sections>
+</config>

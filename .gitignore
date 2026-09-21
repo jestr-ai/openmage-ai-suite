@@ -1,0 +1,9 @@
+/vendor/
+/dev/openmage/
+/dev/setup.log
+/.cache/
+/build/
+/.phpunit.result.cache
+/.php-cs-fixer.cache
+/composer.lock
+.DS_Store

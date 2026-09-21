@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <ainative>
+            <children>
+                <assistant translate="title" module="ainative_core">
+                    <title>Assistant Transcripts</title>
+                    <sort_order>30</sort_order>
+                    <action>adminhtml/ainative_conversation</action>
+                </assistant>
+            </children>
+        </ainative>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <ainative_assistant translate="title" module="ainative_core">
+                                        <title>AI Suite — Storefront Assistant</title>
+                                    </ainative_assistant>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * OpenMage AI Suite
+ * @license MIT
+ */
+-->
+<config>
+    <modules>
+        <AiNative_Core>
+            <active>true</active>
+            <codePool>community</codePool>
+        </AiNative_Core>
+    </modules>
+</config>

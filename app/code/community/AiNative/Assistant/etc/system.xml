@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <ainative_assistant translate="label" module="ainative_core">
+            <label>Storefront Assistant</label>
+            <tab>ainative</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>40</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label" module="ainative_core">
+                    <label>Chat Widget</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label"><label>Enable on Storefront</label><frontend_type>select</frontend_type><source_model>adminhtml/system_config_source_yesno</source_model><sort_order>10</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></enabled>
+                        <name translate="label"><label>Assistant Name</label><frontend_type>text</frontend_type><sort_order>20</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></name>
+                        <greeting translate="label"><label>Greeting</label><frontend_type>textarea</frontend_type><sort_order>30</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></greeting>
+                        <suggestions translate="label comment"><label>Suggested Questions</label><frontend_type>text</frontend_type><sort_order>40</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store><comment>Separate with |</comment></suggestions>
+                        <position translate="label"><label>Position</label><frontend_type>select</frontend_type><source_model>ainative_assistant/config_source_position</source_model><sort_order>50</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></position>
+                        <accent_color translate="label"><label>Accent Color</label><frontend_type>text</frontend_type><sort_order>60</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></accent_color>
+                        <cms_pages translate="label comment"><label>CMS Pages the Assistant May Quote</label><frontend_type>text</frontend_type><sort_order>70</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store><comment>Comma-separated identifiers (FAQ, shipping, returns…). Only these pages are readable.</comment></cms_pages>
+                        <contact_url translate="label"><label>Contact / Handoff URL</label><frontend_type>text</frontend_type><sort_order>80</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></contact_url>
+                        <allow_add_to_cart translate="label"><label>Allow Add-to-Cart Cards</label><frontend_type>select</frontend_type><source_model>adminhtml/system_config_source_yesno</source_model><sort_order>90</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store></allow_add_to_cart>
+                        <allow_order_lookup translate="label comment"><label>Allow Order Lookup</label><frontend_type>select</frontend_type><source_model>adminhtml/system_config_source_yesno</source_model><sort_order>100</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store><comment>Logged-in customers see their own orders; guests must give order number + e-mail.</comment></allow_order_lookup>
+                        <stay_on_topic translate="label comment"><label>Refuse Off-topic Questions</label><frontend_type>select</frontend_type><source_model>adminhtml/system_config_source_yesno</source_model><sort_order>110</sort_order><show_in_default>1</show_in_default><show_in_website>1</show_in_website><show_in_store>1</show_in_store><comment>Keeps the assistant on shopping and store topics.</comment></stay_on_topic>
+                        <max_message_length translate="label"><label>Max Message Length</label><frontend_type>text</frontend_type><validate>validate-digits</validate><sort_order>120</sort_order><show_in_default>1</show_in_default></max_message_length>
+                        <history_messages translate="label"><label>Messages Kept as Context</label><frontend_type>text</frontend_type><validate>validate-digits</validate><sort_order>130</sort_order><show_in_default>1</show_in_default></history_messages>
+                        <rate_limit_per_minute translate="label"><label>Messages per Minute per Visitor</label><frontend_type>text</frontend_type><validate>validate-digits</validate><sort_order>140</sort_order><show_in_default>1</show_in_default></rate_limit_per_minute>
+                        <retention_days translate="label comment"><label>Transcript Retention (days)</label><frontend_type>text</frontend_type><validate>validate-digits</validate><sort_order>150</sort_order><show_in_default>1</show_in_default><comment>Transcripts older than this are deleted nightly (GDPR).</comment></retention_days>
+                    </fields>
+                </general>
+            </groups>
+        </ainative_assistant>
+    </sections>
+</config>

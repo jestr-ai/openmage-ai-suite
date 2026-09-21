@@ -1,0 +1,19 @@
+<?php /** @var AiNative_Assistant_Block_Adminhtml_Conversation_View $this */ $c = $this->getConversation(); ?>
+<div class="content-header">
+  <h3 class="icon-head head-customer"><?php echo $this->__('Transcript #%d — %s · store %d · %s', $c->getId(), $this->escapeHtml($c->getData('actor_type')), (int) $c->getStoreId(), $this->escapeHtml($c->getData('created_at'))); ?></h3>
+  <p class="content-buttons form-buttons">
+    <button type="button" class="scalable back" onclick="setLocation('<?php echo $this->getBackUrl(); ?>')"><span><span><?php echo $this->__('Back'); ?></span></span></button>
+    <button type="button" class="scalable delete" onclick="deleteConfirm('<?php echo $this->__('Delete this transcript?'); ?>', '<?php echo $this->getDeleteUrl(); ?>')"><span><span><?php echo $this->__('Delete'); ?></span></span></button>
+  </p>
+</div>
+<div style="max-width:900px">
+<?php foreach ($c->getMessages() as $m): $cards = $m->getCards(); ?>
+  <div style="margin:8px 0;display:flex;<?php echo $m->getData('role') === 'user' ? 'justify-content:flex-end' : ''; ?>">
+    <div style="max-width:80%;padding:8px 12px;border-radius:10px;background:<?php echo $m->getData('role') === 'user' ? '#e5eefc' : '#f3f3f3'; ?>;white-space:pre-wrap">
+      <div style="font-size:10px;color:#777"><?php echo $this->escapeHtml($m->getData('role')); ?> · <?php echo $this->escapeHtml($m->getData('created_at')); ?><?php if ((int) $m->getData('tool_calls')): ?> · <?php echo (int) $m->getData('tool_calls'); ?> tool call(s)<?php endif; ?></div>
+      <?php echo nl2br($this->escapeHtml((string) $m->getData('content'))); ?>
+      <?php if ($cards): ?><div style="font-size:11px;color:#555;margin-top:6px">cards: <?php echo $this->escapeHtml(implode(', ', array_map(fn($x) => $x['type'] . (isset($x['name']) ? ':' . $x['name'] : (isset($x['order_number']) ? ':' . $x['order_number'] : '')), $cards))); ?></div><?php endif; ?>
+    </div>
+  </div>
+<?php endforeach; ?>
+</div>
