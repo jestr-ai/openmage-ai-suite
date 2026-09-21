@@ -5,6 +5,7 @@
 **Bring AI to the 150,000 storefronts that never left Magento 1.**
 
 [![CI](https://github.com/jestr-ai/openmage-ai-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/jestr-ai/openmage-ai-suite/actions/workflows/ci.yml)
+[![Packagist](https://img.shields.io/packagist/v/jestr-ai/openmage-ai-suite?style=flat-square&color=f28d1a)](https://packagist.org/packages/jestr-ai/openmage-ai-suite)
 [![License: MIT](https://img.shields.io/badge/License-MIT-1f6feb?style=flat-square)](LICENSE)
 [![PHP](https://img.shields.io/badge/PHP-8.1%20%7C%208.2%20%7C%208.3%20%7C%208.4-777BB4?style=flat-square&logo=php&logoColor=white)](https://www.php.net/)
 [![OpenMage](https://img.shields.io/badge/OpenMage-20.x%20%7C%2021.x-F26322?style=flat-square)](https://www.openmage.org/)
@@ -24,8 +25,7 @@ Your infrastructure, your API key, your data.
 From your OpenMage root:
 
 ```bash
-composer config repositories.ainative vcs https://github.com/jestr-ai/openmage-ai-suite
-composer require jestr-ai/openmage-ai-suite:^1.0
+composer require jestr-ai/openmage-ai-suite
 ```
 
 OpenMage already ships `magento-hackathon/magento-composer-installer`, which places the files for you. Nothing else to add.
