@@ -4,50 +4,145 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: shivammathur/setup-php@v2
-        with: { php-version: '8.3', extensions: curl, json, mbstring, dom, simplexml, pdo_mysql }
+        with:
+          php-version: '8.3'
+          extensions: curl, json, mbstring, dom, simplexml
+          coverage: none
+
       - name: PHP syntax
-        run: find app tests -name '*.php' -print0 | xargs -0 -n1 -P4 php -l | grep -v 'No syntax errors' || true
+        run: |
+          fail=0
+          while IFS= read -r -d '' f; do
+            php -l "$f" > /dev/null || fail=1
+          done < <(find app tests dev/scripts -name '*.php' -print0)
+          exit $fail
+
+      - name: XML well-formed
+        run: |
+          php -r '
+            $bad = 0;
+            $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator("app", FilesystemIterator::SKIP_DOTS));
+            foreach ($it as $file) {
+                if (strtolower($file->getExtension()) !== "xml") { continue; }
+                libxml_use_internal_errors(true);
+                if (simplexml_load_file($file->getPathname()) === false) {
+                    echo "INVALID: ", $file->getPathname(), PHP_EOL;
+                    foreach (libxml_get_errors() as $e) { echo "  ", trim($e->message), PHP_EOL; }
+                    $bad++;
+                }
+                libxml_clear_errors();
+            }
+            echo $bad === 0 ? "all XML well-formed" . PHP_EOL : "";
+            exit($bad === 0 ? 0 : 1);
+          '
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: JavaScript syntax
         run: |
-          node -e "new Function(require('fs').readFileSync('skin/adminhtml/default/default/ainative/copilot.js','utf8'))"
-          node -e "new Function(require('fs').readFileSync('skin/frontend/base/default/ainative/assistant.js','utf8'))"
-      - name: XML well-formed
-        run: find app -name '*.xml' -print0 | xargs -0 -n1 xmllint --noout
+          node --check skin/adminhtml/default/default/ainative/copilot.js
+          node --check skin/frontend/base/default/ainative/assistant.js
 
-  unit:
+  tests:
+    name: Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.3']
     services:
       mariadb:
         image: mariadb:10.11
-        env: { MARIADB_ROOT_PASSWORD: root, MARIADB_DATABASE: openmage }
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: openmage
         ports: ['3306:3306']
-        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=5s --health-retries=20
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=30
     steps:
-      - uses: actions/checkout@v4
-        with: { path: suite }
-      - uses: actions/checkout@v4
-        with: { repository: OpenMage/magento-lts, ref: v20.18.0, path: openmage }
+      - name: Checkout suite
+        uses: actions/checkout@v4
+        with:
+          path: suite
+
+      - name: Checkout OpenMage
+        uses: actions/checkout@v4
+        with:
+          repository: OpenMage/magento-lts
+          ref: v20.18.0
+          path: openmage
+
       - uses: shivammathur/setup-php@v2
-        with: { php-version: '8.3', extensions: curl, json, mbstring, dom, simplexml, pdo_mysql, gd, intl, bcmath, soap }
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, json, mbstring, dom, simplexml, pdo_mysql, gd, intl, bcmath, soap, xsl, zip
+          coverage: none
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ matrix.php }}-${{ hashFiles('openmage/composer.json') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Install OpenMage dependencies
+        working-directory: openmage
+        run: composer install --no-interaction --prefer-dist --no-progress
+
       - name: Install OpenMage
         working-directory: openmage
         run: |
-          composer install --no-interaction --prefer-dist --no-progress
-          php -f install.php -- --license_agreement_accepted yes --locale en_US --timezone UTC --default_currency USD \
-            --db_host 127.0.0.1 --db_name openmage --db_user root --db_pass root --url http://127.0.0.1/ --skip_url_validation yes \
+          php -f install.php -- \
+            --license_agreement_accepted yes \
+            --locale en_US --timezone UTC --default_currency USD \
+            --db_host 127.0.0.1 --db_name openmage --db_user root --db_pass root \
+            --url http://127.0.0.1/ --skip_url_validation yes \
             --use_rewrites yes --use_secure no --secure_base_url http://127.0.0.1/ --use_secure_admin no \
-            --admin_lastname Admin --admin_firstname CI --admin_email ci@example.com --admin_username admin --admin_password 'CiPassw0rd!!'
-      - name: Link suite
+            --admin_lastname Admin --admin_firstname CI --admin_email ci@example.com \
+            --admin_username admin --admin_password 'CiSuitePassw0rd2026!'
+
+      - name: Link the suite
         working-directory: openmage
         run: |
-          curl -sSL https://raw.githubusercontent.com/colinmollenhour/modman/master/modman -o /usr/local/bin/modman && chmod +x /usr/local/bin/modman
-          modman init && modman link ../suite
+          sudo curl -sSL https://raw.githubusercontent.com/colinmollenhour/modman/master/modman -o /usr/local/bin/modman
+          sudo chmod +x /usr/local/bin/modman
+          modman init
+          modman link "$GITHUB_WORKSPACE/suite"
+
+      - name: Apply setup scripts
+        working-directory: openmage
+        run: |
+          php -r '
+            require "app/Mage.php";
+            Mage::app("admin");
+            Mage::app()->getCacheInstance()->flush();
+            Mage::getConfig()->reinit();
+            Mage_Core_Model_Resource_Setup::applyAllUpdates();
+            foreach (["AiNative_Core","AiNative_Mcp","AiNative_Copilot","AiNative_Assistant","AiNative_Discovery"] as $m) {
+                $active = (string) Mage::getConfig()->getModuleConfig($m)->active;
+                if ($active !== "true") { echo "module not active: $m", PHP_EOL; exit(1); }
+            }
+            $conn = Mage::getSingleton("core/resource")->getConnection("core_read");
+            foreach (["ainative_audit","ainative_usage","ainative_mcp_token","ainative_job","ainative_conversation"] as $t) {
+                if (!$conn->isTableExists($t)) { echo "table missing: $t", PHP_EOL; exit(1); }
+            }
+            echo "modules active, schema installed", PHP_EOL;
+          '
+
       - name: Run tests
         working-directory: suite
-        run: OPENMAGE_ROOT=../openmage php ../openmage/vendor/bin/phpunit -c .phpunit.dist.xml
+        run: OPENMAGE_ROOT="$GITHUB_WORKSPACE/openmage" php "$GITHUB_WORKSPACE/openmage/vendor/bin/phpunit" -c .phpunit.dist.xml
