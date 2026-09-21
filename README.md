@@ -62,6 +62,8 @@ Then:
 
 **Requirements** OpenMage LTS 20.x or 21.x, PHP 8.1+, cURL. Every feature ships disabled; you turn on only what you want.
 
+> **Deploying to production** OpenMage symlinks Composer modules in development and copies them when you run `composer install --no-dev`. Use `--no-dev` on hosts that do not follow symlinks.
+
 ---
 
 ## Why
