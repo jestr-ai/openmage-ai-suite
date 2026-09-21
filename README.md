@@ -21,19 +21,14 @@ Your infrastructure, your API key, your data.
 
 ## Install
 
-```bash
-composer require magento-hackathon/magento-composer-installer jestr-ai/openmage-ai-suite
-```
-
-<details>
-<summary><b>Not on Packagist yet? Install from the repository</b></summary>
+From your OpenMage root:
 
 ```bash
 composer config repositories.ainative vcs https://github.com/jestr-ai/openmage-ai-suite
-composer require jestr-ai/openmage-ai-suite:dev-main
+composer require jestr-ai/openmage-ai-suite:^1.0
 ```
 
-</details>
+OpenMage already ships `magento-hackathon/magento-composer-installer`, which places the files for you. Nothing else to add.
 
 <details>
 <summary><b>modman</b></summary>
