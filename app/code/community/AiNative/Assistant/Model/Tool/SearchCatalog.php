@@ -72,7 +72,7 @@ class AiNative_Assistant_Model_Tool_SearchCatalog extends AiNative_Assistant_Mod
         foreach ($collection as $p) {
             $items[] = $this->productCard($p, $store);
         }
-        $context->withMeta('last_products', $items);
+        $this->rememberProducts($context, $items);
         return ['query' => $query, 'count' => count($items), 'products' => $items, 'hint' => $items ? null : 'No results. Try different or broader keywords, or list_categories to browse.'];
     }
 

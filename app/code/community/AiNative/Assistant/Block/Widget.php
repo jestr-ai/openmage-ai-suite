@@ -39,6 +39,7 @@ class AiNative_Assistant_Block_Widget extends Mage_Core_Block_Template
                 'contact' => $this->__('Contact the store'),
                 'track' => $this->__('Track'),
                 'newChat' => $this->__('New chat'),
+                'retry' => $this->__('Try again'),
                 'disclaimer' => $this->__('AI assistant — answers may contain mistakes; check the product page before ordering.'),
             ],
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP);

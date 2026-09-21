@@ -62,9 +62,17 @@
     msg('user', esc(text));
     var thinking = msg('bot', '<i>' + esc(L.thinking) + '</i>');
     fetch(cfg.url, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ message: text, conversation_id: conversationId, form_key: cfg.formKey, page: location.href }) })
-      .then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) throw new Error(j.error || 'Error ' + r.status); return j; }); })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok || j.error) { var err = new Error(j.error || 'Error ' + r.status); err.retryable = !!j.retryable; throw err; } return j; }); })
       .then(function (j) { thinking.remove(); conversationId = j.conversation_id; try { sessionStorage.setItem(storeKey, String(conversationId)); } catch (e) {} render(j); })
-      .catch(function (e) { thinking.innerHTML = '<span class="ainav__err">' + esc(e.message) + '</span>'; })
+      .catch(function (e) {
+        thinking.innerHTML = '<span class="ainav__err">' + esc(e.message) + '</span>';
+        if (e.retryable) {
+          var again = el('button', 'ainav__chip', esc(L.retry || 'Try again'));
+          again.type = 'button';
+          again.addEventListener('click', function () { thinking.remove(); send(text); });
+          thinking.appendChild(again);
+        }
+      })
       .then(function () { busy = false; sendBtn.disabled = false; input.focus(); });
   }
   form.addEventListener('submit', function (e) { e.preventDefault(); var v = input.value; input.value = ''; input.style.height = ''; send(v); });

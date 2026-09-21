@@ -53,6 +53,7 @@ class AiNative_Assistant_Model_Tool_CurrentPromotions extends AiNative_Assistant
         foreach ($collection as $p) {
             $sale[] = $this->productCard($p, $store);
         }
+        $this->rememberProducts($context, $sale);
         return ['promotions' => $out, 'on_sale_products' => $sale, 'note' => 'Coupon codes are only shown when the merchant published them in the promotion description.'];
     }
 }

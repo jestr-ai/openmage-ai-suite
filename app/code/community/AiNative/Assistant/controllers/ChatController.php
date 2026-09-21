@@ -49,6 +49,15 @@ class AiNative_Assistant_ChatController extends Mage_Core_Controller_Front_Actio
                 mb_substr((string) ($payload['page'] ?? ''), 0, 300),
             );
             $response->setBody(json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        } catch (AiNative_Core_Exception_Provider $e) {
+            // The shopper must never see provider internals (status codes, keys, model names).
+            Mage::helper('ainative_core')->log('assistant provider failure: ' . $e->getMessage(), null, Zend_Log::ERR);
+            $response->setHttpResponseCode($e->isTransient() ? 503 : 500)->setBody(json_encode([
+                'error' => $e->isTransient()
+                    ? Mage::helper('ainative_core')->__('I am a little busy right now. Please try again in a moment.')
+                    : Mage::helper('ainative_core')->__('The assistant is unavailable right now. Please contact the store directly.'),
+                'retryable' => $e->isTransient(),
+            ]));
         } catch (AiNative_Core_Exception $e) {
             $response->setHttpResponseCode(400)->setBody(json_encode(['error' => $e->getMessage()]));
         } catch (Throwable $e) {

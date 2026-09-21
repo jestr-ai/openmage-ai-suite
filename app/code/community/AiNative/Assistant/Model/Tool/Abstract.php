@@ -38,6 +38,23 @@ abstract class AiNative_Assistant_Model_Tool_Abstract extends AiNative_Core_Mode
     }
 
     /**
+     * Remember products this tool surfaced so the chat can attach a card for any the model names.
+     *
+     * @param array<int, array<string, mixed>> $cards
+     */
+    protected function rememberProducts(AiNative_Core_Model_Tool_Context $context, array $cards): void
+    {
+        $seen = (array) $context->getMeta('last_products', []);
+        $byId = [];
+        foreach (array_merge($seen, $cards) as $card) {
+            if (!empty($card['id'])) {
+                $byId[(int) $card['id']] = $card;
+            }
+        }
+        $context->withMeta('last_products', array_values($byId));
+    }
+
+    /**
      * Grouped, bundle and configurable products have no own price: getFinalPrice() returns 0 while the
      * price index holds the real range. Fall back to the index and flag the price as a "from" price.
      *

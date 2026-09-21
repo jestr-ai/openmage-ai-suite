@@ -150,6 +150,30 @@ final class ProviderPayloadTest extends TestCase
         self::assertNotEmpty($turn->getToolCalls()[0]->id, 'Gemini has no call ids; adapter must synthesise one');
     }
 
+    public function testHttpErrorSurfacesAsProviderException(): void
+    {
+        $p = new class extends AiNative_Core_Model_Provider_Anthropic {
+            public function getModel(): string
+            {
+                return 'm';
+            }
+            protected function getApiKey(): string
+            {
+                return 'k';
+            }
+            protected function getBaseUrl(): string
+            {
+                return 'https://example.invalid';
+            }
+            protected function config(string $key): string
+            {
+                return '';
+            }
+        };
+        $this->expectException(AiNative_Core_Exception_Provider::class);
+        $p->complete(AiNative_Core_Model_Conversation::create('s')->addUser('hi'));
+    }
+
     public function testGeminiSafetyBlockIsRefusal(): void
     {
         $p = new AiNativeGeminiDouble();

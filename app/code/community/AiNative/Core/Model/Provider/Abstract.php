@@ -117,6 +117,7 @@ abstract class AiNative_Core_Model_Provider_Abstract implements AiNative_Core_Mo
         $attempts = 0;
         $maxAttempts = 3;
         $lastError = '';
+        $lastStatus = 0;
         while ($attempts < $maxAttempts) {
             $attempts++;
             $ch = curl_init($url);
@@ -137,6 +138,7 @@ abstract class AiNative_Core_Model_Provider_Abstract implements AiNative_Core_Mo
 
             if ($raw === false || $raw === '') {
                 $lastError = 'transport error: ' . ($curlErr ?: 'empty response');
+                $lastStatus = $status;
             } else {
                 $decoded = json_decode((string) $raw, true);
                 if ($status >= 200 && $status < 300 && is_array($decoded)) {
@@ -144,7 +146,9 @@ abstract class AiNative_Core_Model_Provider_Abstract implements AiNative_Core_Mo
                     return $decoded;
                 }
                 $lastError = sprintf('HTTP %d: %s', $status, $helper->summarize(is_array($decoded) ? ($decoded['error'] ?? $decoded) : $raw, 600));
-                $retryable = in_array($status, [408, 409, 429], true) || $status >= 500;
+                $lastStatus = $status;
+                // 529 is Anthropic's "overloaded"; 408/409/429 and 5xx are all worth another attempt.
+                $retryable = in_array($status, [408, 409, 429, 529], true) || $status >= 500;
                 if (!$retryable) {
                     break;
                 }
@@ -153,8 +157,12 @@ abstract class AiNative_Core_Model_Provider_Abstract implements AiNative_Core_Mo
                 usleep((int) (250000 * (2 ** ($attempts - 1)) + random_int(0, 100000)));
             }
         }
-        $helper->log(sprintf('[%s] request failed: %s', $this->getCode(), $lastError), null, Zend_Log::ERR);
-        throw new AiNative_Core_Exception(sprintf('%s API error — %s', ucfirst($this->getCode()), $lastError));
+        $helper->log(sprintf('[%s] request failed after %d attempt(s): %s', $this->getCode(), $attempts, $lastError), null, Zend_Log::ERR);
+        throw new AiNative_Core_Exception_Provider(
+            sprintf('%s API error — %s', ucfirst($this->getCode()), $lastError),
+            $lastStatus,
+            $lastStatus === 0 || in_array($lastStatus, [408, 409, 429, 529], true) || $lastStatus >= 500,
+        );
     }
 
     /**

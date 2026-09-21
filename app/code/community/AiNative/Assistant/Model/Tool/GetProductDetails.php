@@ -69,6 +69,7 @@ class AiNative_Assistant_Model_Tool_GetProductDetails extends AiNative_Assistant
                 $variants[] = ['sku' => $child->getSku(), 'options' => $opt, 'in_stock' => (bool) $child->isSaleable(), 'price' => $this->price((float) $child->getFinalPrice(), $store)];
             }
         }
+        $this->rememberProducts($context, [$card]);
         $reviews = Mage::getModel('review/review_summary')->setStoreId((int) $store->getId())->load($product->getId());
         return $card + [
             'description' => mb_substr(trim(preg_replace('/\s+/', ' ', strip_tags((string) $product->getDescription())) ?? ''), 0, 1500),
